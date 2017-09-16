@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sqlite3 -csv ~/.config/midori/bookmarks.db 'SELECT created, uri, title FROM bookmarks' | csvtool -t COMMA -u TAB cat /dev/stdin | sed -E 's/‪//g'
