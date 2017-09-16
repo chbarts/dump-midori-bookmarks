@@ -1,3 +1,9 @@
 #!/bin/bash
 
-sqlite3 -csv ~/.config/midori/bookmarks.db 'SELECT created, uri, title FROM bookmarks' | csvtool -t COMMA -u TAB cat /dev/stdin | sed -E 's/‪//g' | sed 's/\t"/\t/g;s/"$//g;s/""/"/g'
+case $# in
+    0) inf=~/.config/midori/bookmarks.db ;;
+    1) inf="$@" ;;
+    *) echo "usage: $0 [bookmarks.db] > bookmarks.tsv\ninput defaults to ~/.config/midori/bookmarks.db"; exit 0 ;;
+esac
+
+sqlite3 -csv $inf 'SELECT created, uri, title FROM bookmarks' | csvtool -t COMMA -u TAB cat /dev/stdin | sed -E 's/‪//g' | sed 's/\t"/\t/g;s/"$//g;s/""/"/g'
